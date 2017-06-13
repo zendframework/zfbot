@@ -1,0 +1,7 @@
+disabled/
+node_modules/
+.DS_Store*
+.env
+.env.sh
+.hubot_history
+scripts/test.coffee

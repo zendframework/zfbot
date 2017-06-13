@@ -1,0 +1,20 @@
+version: '2'
+services:
+  redis:
+    image: "redis:alpine"
+    volumes:
+      - ./data:/data
+  hubot:
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - .:/hubot
+    ports:
+      - "9001:9001"
+  redis-dev:
+    image: "redis:alpine"
+    volumes:
+      - ./data:/data
+    ports:
+      - "6379:6379"
