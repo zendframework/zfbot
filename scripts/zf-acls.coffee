@@ -80,19 +80,6 @@ module.exports = (robot) ->
       @user_whitelist.forEach (user) ->
         msg.send "- #{user}"
 
-    verifyUser: (user) ->
-      console.log "Verifying user", user
-      return true if 1 > @user_whitelist.length
-      console.log "Whitelist is non-empty"
-      return true if user.user in @user_whitelist
-      console.log "User is not in whitelist"
-      error =
-        message: "User #{user.user} does not have permissions for #{user.context}"
-        user: user.user
-        context: user.context
-      throw error
-
-
   user_whitelist = []
   if process.env.HUBOT_ZF_ACL_USER_WHITELIST
     user_whitelist = process.env.HUBOT_ZF_ACL_USER_WHITELIST
@@ -104,4 +91,3 @@ module.exports = (robot) ->
   robot.respond /acl allow (.*)$/i, (msg) -> acl.allow(msg)
   robot.respond /acl deny (.*)$/i, (msg) -> acl.deny(msg)
   robot.brain.on "loaded", (data) -> acl.load(data)
-  robot.brain.on "acl.verify", (user) -> acl.verifyUser(user)
