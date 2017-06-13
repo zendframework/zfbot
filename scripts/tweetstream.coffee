@@ -96,13 +96,24 @@ module.exports = (robot) ->
           toSave =
             type: TYPES.TRACK
             room: stream.room
-            follow: stream.track
+            track: stream.track
         else
           return
 
       savedStreams = @robot.brain.get(@BRAIN_TWITTER_STREAMS)
       savedStreams.push(toSave)
       @robot.brain.set(@BRAIN_TWITTER_STREAMS, savedStreams)
+
+    formatTimeString: (date) ->
+      ampm  = "am"
+      hours = date.getHours()
+      ampm  = "pm" if hours > 11
+      hours = hours - 12 if hours > 12
+      hours = 12 if hours == 0
+      minutes = date.getMinutes()
+      minutes = "0" + minutes if minutes < 10
+
+      "#{hours}:#{minutes} #{ampm}"
 
     initializeStream: (stream) ->
       filter = {}
@@ -116,10 +127,34 @@ module.exports = (robot) ->
           return
 
       tweetStream = @twit.stream('statuses/filter', filter)
-      tweetStream.on('tweet', (tweet) =>
+      tweetStream.on 'tweet', (tweet) =>
         return if stream.type == TYPES.FOLLOW && tweet.user.id_str != stream.follow
-        @robot.messageRoom(stream.room, "https://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id_str}\n")
-      )
+        ts = new Date(tweet.created_at)
+        ts = new Date(ts.getTime())
+        created = @formatTimeString ts
+
+        attachment =
+          attachments: [
+            color: "#00ACED"
+            fallback: "@#{tweet.user.screen_name} at #{created}: https://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id_str}"
+            author_name: "#{tweet.user.screen_name} @#{tweet.user.name}"
+            author_link: "https://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id_str}"
+            author_icon: "#{tweet.user.profile_image_url_https}"
+            text: tweet.text
+            footer: "Twitter"
+            footer_icon: "https://a.slack-edge.com/66f9/img/services/twitter_128.png"
+            ts: Math.floor(ts.getTime() / 1000)
+          ]
+
+        if tweet.entities?.media? && tweet.entities.media.length > 0
+          tweet.entities.media.forEach (media) ->
+            attachment.attachments.push({
+              color: "#00ACED"
+              fallback: media.media_url_https
+              text: media.media_url_https
+            })
+
+        @robot.send room: stream.room, attachment
 
       @robot.logger.info("Started a new twitter stream", filter)
       stream.tweet_stream = tweetStream

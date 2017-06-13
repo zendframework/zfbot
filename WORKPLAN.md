@@ -1,6 +1,6 @@
 # WORKPLAN
 
-## ACLs
+## [X] ACLs
 
 Create an ACL system that will be used by all plugins, and which exposes
 commands for manipulating the ACLs. It should:
@@ -52,11 +52,18 @@ Only somebody _already in the whitelist_ may perform any of the above.
   If so, will each script get the _same_ instance, or _different_ instances? If
   the latter, it's untenable.
 
+### Final solution
+
+Wrote a library function, `authorize`, that accepts the robot and message as
+arguments. It then pulls the ACL from the robot.brain, and checks the envelope
+user against it.
+
 ## Twitter
 
-- Rewrite to use the new ACL system, and thus remove the ACL bits it contained.
-- Rewrite to use attachments (see github.coffee) to display tweets. (? Check to
+- [x] Rewrite to use the new ACL system, and thus remove the ACL bits it contained.
+- [x] Rewrite to use attachments (see github.coffee) to display tweets. (? Check to
   see how they are displayed before doing this.)
+- [x] Fix issue with tracks not persisting
 
 ## Github
 
