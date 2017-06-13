@@ -2,12 +2,12 @@
 #  Subscribe to tweets matching keywords
 #
 # Commands:
-#   hubot twitter track <keyword>        - Start watching a keyword
-#   hubot twitter untrack <keyword>      - Stop watching a keyword
-#   hubot twitter follow <screen_name>   - Start following tweets from @screen_name
+#   hubot twitter track <keyword> - Start watching a keyword
+#   hubot twitter untrack <keyword> - Stop watching a keyword
+#   hubot twitter follow <screen_name> - Start following tweets from @screen_name
 #   hubot twitter unfollow <screen_name> - Stop following tweets from @screen_name
-#   hubot twitter list                   - Get the watched keywords and users list in current room
-#   hubot twitter clear                  - Stop watching all keywords and users in current room
+#   hubot twitter list - Get the watched keywords and users list in current room
+#   hubot twitter clear - Stop watching all keywords and users in current room
 #
 # Configuration:
 #

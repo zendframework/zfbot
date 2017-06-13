@@ -4,8 +4,8 @@
 #
 # Commands:
 #   hubot acl allow <user> - Add a user to the whitelist.
-#   hubot acl deny <user>  - Remove a user from the whitelist.
-#   hubot acl list         - List users in the whitelist.
+#   hubot acl deny <user> - Remove a user from the whitelist.
+#   hubot acl list - List users in the whitelist.
 #
 # Configuration:
 #
