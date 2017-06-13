@@ -76,9 +76,10 @@ module.exports = (robot) ->
         msg.send "No users in whitelist!"
         return
 
-      msg.send "Found #{@user_whitelist.length} users in whitelist:"
+      users = ["Found #{@user_whitelist.length} users in whitelist:"]
       @user_whitelist.forEach (user) ->
-        msg.send "- #{user}"
+        users.push "- #{user}"
+      msg.send users.join("\n")
 
   user_whitelist = []
   if process.env.HUBOT_ZF_ACL_USER_WHITELIST
