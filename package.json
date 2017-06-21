@@ -7,7 +7,9 @@
   "dependencies": {
     "coffee-script": "^1.12.6",
     "discourse-api": "^1.8.0",
+    "form-urlencoded": "^1.5.1",
     "githubot": "^1.0.1",
+    "hmacsha1": "^1.0.0",
     "hubot": "^2.19.0",
     "hubot-diagnostics": "0.0.1",
     "hubot-help": "^0.2.0",
@@ -17,6 +19,7 @@
     "hubot-scripts": "^2.17.2",
     "hubot-shipit": "^0.2.0",
     "hubot-slack": "^4.3.4",
+    "node-fetch": "^1.7.1",
     "twit": "^2.2.5"
   },
   "engines": {
