@@ -244,7 +244,7 @@ module.exports = (robot) ->
       toRemove = _.remove(@streams, match)
       return false if !toRemove.length
 
-      subscription.stream.stop() for subscription in toRemove
+      subscription.tweet_stream.stop() for subscription in toRemove
 
       savedStreams = @robot.brain.get(@BRAIN_TWITTER_STREAMS)
       @robot.brain.set(@BRAIN_TWITTER_STREAMS, _.remove(savedStreams, match))
