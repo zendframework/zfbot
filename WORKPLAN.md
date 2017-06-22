@@ -79,44 +79,44 @@ harder.
   - pull_request
   - release
   - status
-- Write functionality for _subscribing_ to a PuSH endpoint
-  - Requires ENV vars for:
-    - a github username
-    - an OAuth2 personal access token associated with the username
-    - a shared secret key for request verification purposes
-    - the public-accessible, TLS-enabled URI for the server
-  - Requires following input:
-    - channel name
-    - org/owner
-    - repo
-    - or combine the last two, and split them on receipt
-  - Makes a request for each event we're interested in to
+- [x] Write functionality for _subscribing_ to a PuSH endpoint
+  - [x] Requires ENV vars for:
+    - [x] a github username
+    - [x] an OAuth2 personal access token associated with the username
+    - [x] a shared secret key for request verification purposes
+    - [x] the public-accessible, TLS-enabled URI for the server
+  - [x] Requires following input:
+    - [x] channel name
+    - [ ] org/owner
+    - [ ] repo
+    - [x] or combine the last two, and split them on receipt
+  - [x] Makes a request for each event we're interested in to
     https://api.github.com/hub, passing the appropriate GitHub topic URL (which
     requires the org/owner and repo) and the hubot callback URL, and the shared
     secret key. This MUST append `.json` to the GitHub URI to ensure we get a
     JSON payload pushed to us!
-  - Stores the channel name and repository in the robot.brain
-- Write functionality for _unsubscribing_ to a PuSH endpoint
-  - Same ENV requirements as for subscribing, minus the shared secret
-  - Same INPUT requirements as for subscribing
-  - Does the same request as for subscribing, but `hub.mode` will be
+  - [x] Stores the channel name and repository in the robot.brain
+- [x] Write functionality for _unsubscribing_ to a PuSH endpoint
+  - [x] Same ENV requirements as for subscribing, minus the shared secret
+  - [x] Same INPUT requirements as for subscribing
+  - [x] Does the same request as for subscribing, but `hub.mode` will be
     `unsubscribe`
-  - Removes the robot.brain entry for the given channel/repository combo
-- Write routes for the events we want to listen to.
-  - Verify the push came from github, by grabbing the signature from
+  - [x] Removes the robot.brain entry for the given channel/repository combo
+- [x] Write routes for the events we want to listen to.
+  - [x] Verify the push came from github, by grabbing the signature from
     X-Hub-Signature, and comparing that value to a SHA1 HMAC of the response
     body (usin the shared secret).
-  - Evaluate payloads received for items of interest
-  - Post details of items of interest to the configured room
-    - Use message attachments to allow creating custom look-and-feel for
+  - [x] Evaluate payloads received for items of interest
+  - [x] Post details of items of interest to the configured room
+    - [x] Use message attachments to allow creating custom look-and-feel for
       different events.
-- Write listeners for:
-  - `github follow <repo>`: subscribe to the given repository in this channel
-  - `github unfollow <repo>`: unsubscribe from the given repo in this channel
-  - `github list`: list subscriptions in this channel
-  - `github clear`: clear any subscriptions from this channel
-- Eventually:
-  - Write functionality for the `push` event that, on a push to master, triggers
+- [x] Write listeners for:
+  - [x] `github follow <repo>`: subscribe to the given repository in this channel
+  - [x] `github unfollow <repo>`: unsubscribe from the given repo in this channel
+  - [x] `github list`: list subscriptions in this channel
+  - [x] `github clear`: clear any subscriptions from this channel
+- [ ] Eventually:
+  - [ ] Write functionality for the `push` event that, on a push to master, triggers
     a build of the documentation. 
 
 ## Discourse
