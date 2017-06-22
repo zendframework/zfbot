@@ -31,10 +31,10 @@ module.exports = (robot, room, payload) ->
     attachments: [
       fallback: "[#{repo}] New release #{release_name} created by #{user_name}: #{release_url}"
       color: "#4183C4"
+      pretext: "[<https://github.com/#{repo}|#{repo}>] New release <#{release_url}|#{release_name}> created by <#{user_url}|#{user_name}>"
       author_name: "#{repo} (GitHub)"
       author_link: "https://github.com/#{repo}"
       author_icon: "https://a.slack-edge.com/2fac/plugins/github/assets/service_36.png"
-      pretext: "[#{repo}] New release #{release_name} created by #{user_name}"
       title: release_name
       title_link: release_url
       text: release_body

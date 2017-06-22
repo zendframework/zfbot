@@ -32,7 +32,7 @@ module.exports = (robot, room, payload) ->
     attachments: [
       fallback: "[#{repo}] #{user_name} commented on pull request ##{pr_id}: #{url}"
       color: "#FAD5A1"
-      pretext: "[#{repo}] #{user_name} commented on ##{pr_id} #{pr_title}"
+      pretext: "[<https://github.com/#{repo}|#{repo}>] <#{user_url}|#{user_name}> commented on <#{pr_url}|##{pr_id} #{pr_title}>"
       author_name: "#{repo} (GitHub)"
       author_link: "https://github.com/#{repo}"
       author_icon: "https://a.slack-edge.com/2fac/plugins/github/assets/service_36.png"
