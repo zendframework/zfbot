@@ -68,7 +68,7 @@ user against it.
   Currently, it appears that all subscriptions EXCEPT what you wish to unfollow
   are removed from the brain.
 
-## Github
+## [x] Github
 
 This is the trickiest integration, as PuSH requires TLS, **and** github doesn't
 have great detail on what the payloads look like, making emulation and testing
@@ -118,9 +118,13 @@ harder.
   - [x] `github unfollow <repo>`: unsubscribe from the given repo in this channel
   - [x] `github list`: list subscriptions in this channel
   - [x] `github clear`: clear any subscriptions from this channel
-- [ ] Eventually:
-  - [ ] Write functionality for the `push` event that, on a push to master, triggers
-    a build of the documentation. 
+
+## [ ] Github Stretch Goals
+
+- [ ] Write functionality for the `push` event that, on a push to master, triggers
+  a build of the documentation. 
+- [ ] Write functionality for the `release` event that updates the release RSS
+  feed and/or notifies twitter.
 
 ## Discourse
 
