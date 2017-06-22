@@ -35,25 +35,25 @@ module.exports = (robot) ->
   github_release = require '../lib/github-release'
   github_status = require '../lib/github-status'
 
-  GITHUB_TOKEN = process.env.HUBOT_GITHUB_TOKEN
-  GITHUB_DEFAULT_ORG = if process.env.HUBOT_GITHUB_DEFAULT_ORG? then process.env.HUBOT_GITHUB_DEFAULT_ORG else "zendframework"
-  GITHUB_CALLBACK_URL_BASE = process.env.HUBOT_GITHUB_CALLBACK_URL_BASE
-  GITHUB_CALLBACK_SECRET = process.env.HUBOT_GITHUB_CALLBACK_SECRET
+  HUBOT_GITHUB_TOKEN = process.env.HUBOT_GITHUB_TOKEN
+  HUBOT_GITHUB_DEFAULT_ORG = if process.env.HUBOT_GITHUB_DEFAULT_ORG? then process.env.HUBOT_GITHUB_DEFAULT_ORG else "zendframework"
+  HUBOT_GITHUB_CALLBACK_URL_BASE = process.env.HUBOT_GITHUB_CALLBACK_URL_BASE
+  HUBOT_GITHUB_CALLBACK_SECRET = process.env.HUBOT_GITHUB_CALLBACK_SECRET
 
-  githubSub = new github_push robot, HUBOT_GITHUB_CALLBACK_URL_BASE, GITHUB_TOKEN, HUBOT_GITHUB_CALLBACK_SECRET
+  githubSub = new github_push robot, HUBOT_GITHUB_CALLBACK_URL_BASE, HUBOT_GITHUB_TOKEN, HUBOT_GITHUB_CALLBACK_SECRET
 
   robot.respond /github follow (.*)$/i, (msg) ->
     return msg.send "You are not allowed to do that." if !authorize(robot, msg)
     repo = msg.match[1]
     if not repo.match(/^[^/]+\/[^/]+$/)
-      repo = "#{GITHUB_DEFAULT_ORG}/#{repo}"
+      repo = "#{HUBOT_GITHUB_DEFAULT_ORG}/#{repo}"
     githubSub.subscribe msg, repo
 
   robot.respond /github unfollow (.*)$/i, (msg) ->
     return msg.send "You are not allowed to do that." if !authorize(robot, msg)
     repo = msg.match[1]
     if not repo.match(/^[^/]+\/[^/]+$/)
-      repo = "#{GITHUB_DEFAULT_ORG}/#{repo}"
+      repo = "#{HUBOT_GITHUB_DEFAULT_ORG}/#{repo}"
     githubSub.unsubscribe msg, repo
 
   robot.respond /github list/i, (msg) ->

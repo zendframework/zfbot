@@ -23,7 +23,7 @@ fetch = require 'node-fetch'
 formurlencoded = require 'form-urlencoded'
 hmacsha1 = require 'hmacsha1'
 
-module.exports =
+class GithubPush
   constructor: (@robot, @hubbaseurl, @token, @secret) ->
 
   BRAIN_GITHUB_REPOS: "github"
@@ -54,7 +54,7 @@ module.exports =
           Authorization: "token #{@token}"
           "Content-Type": "application/x-www-form-urlencoded"
       }).then((res) =>
-        if not res.ok()
+        if not res.ok
           msg.send "Error subscribing to #{repo} event #{event}; please check the logs"
           @robot.logger.error "Error subscribing to #{repo} event #{event}: #{err}\n#{err.stack}"
           return
@@ -87,7 +87,7 @@ module.exports =
           Authorization: "token #{@token}"
           "Content-Type": "application/x-www-form-urlencoded"
       }).then((res) =>
-        if not res.ok()
+        if not res.ok
           msg.send "Error unsubscribing to #{repo} event #{event}; please check the logs"
           @robot.logger.error "Error unsubscribing to #{repo} event #{event}: #{err}\n#{err.stack}"
           return
@@ -110,10 +110,16 @@ module.exports =
     entries = [] if not entries?.length?
     entries = entries.filter (entry) =>
       entry.room == room
-    repos = entries.map (entry) =>
-      "- #{entry.repo}"
 
-    if not repos.length?
+    reduce = (unique, entry) ->
+      unique.push entry.repo if entry.repo not in unique
+      unique
+
+    repos = entries.reduce reduce, []
+    repos = repos.map (repo) =>
+      "- #{repo}"
+
+    if not repos.length
       msg.send "No github subscriptions in this room"
       return
 
@@ -141,3 +147,5 @@ module.exports =
     repos = repos.filter (test) =>
       return test.repo == repo and test.room == room
     return true if repos.length
+
+module.exports = GithubPush
