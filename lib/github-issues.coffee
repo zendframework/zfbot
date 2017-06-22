@@ -33,15 +33,32 @@ module.exports = (robot, room, payload) ->
 
   attachment =
     attachments: [
-      fallback: "[#{repo}] Issue [##{issue_id}](#{issue_url}) #{action} by [#{user_name}](#{user_url})"
+      fallback: "[#{repo}] Issue ##{issue_id} #{action} by #{user_name}: #{issue_url}"
       color: "warning"
-      pretext: "[#{repo}] Issue #{action} by [#{user_name}](#{user_url})"
+      pretext: "Issue #{action} by #{user_name} on #{repo}"
       author_name: "#{repo} (GitHub)"
       author_link: "https://github.com/#{repo}"
       author_icon: "https://a.slack-edge.com/2fac/plugins/github/assets/service_36.png"
       title: "##{issue_id} #{issue_title}"
       title_link: issue_url
       text: issue_content
+      fields: [
+        {
+          title: "Repository"
+          value: "<https://github.com/#{repo}|#{repo}>"
+          short: true
+        }
+        {
+          title: "Reporter"
+          value: "<#{user_url}|#{user_name}>"
+          short: true
+        }
+        {
+          title: "Status"
+          value: action
+          short: true
+        }
+      ]
       footer: "GitHub"
       footer_icon: "https://a.slack-edge.com/2fac/plugins/github/assets/service_36.png"
       ts: ts

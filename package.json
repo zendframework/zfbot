@@ -9,7 +9,6 @@
     "discourse-api": "^1.8.0",
     "form-urlencoded": "^1.5.1",
     "githubot": "^1.0.1",
-    "hmacsha1": "^1.0.0",
     "hubot": "^2.19.0",
     "hubot-diagnostics": "0.0.1",
     "hubot-help": "^0.2.0",

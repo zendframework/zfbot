@@ -35,11 +35,30 @@ module.exports = (robot, room, payload) ->
     attachments: [
       fallback: "[#{repo}] #{user_name} #{state} pull request ##{pr_id}: #{pr_url}"
       color: "#E3E4E6"
-      pretext: "[#{repo}] [#{user_name}](#{user_url}) #{state} [##{pr_id} #{pr_title}](#{pr_url})"
+      pretext: "[#{repo}] #{user_name} #{state} ##{pr_id} #{pr_title}"
       author_name: "#{repo} (GitHub)"
       author_link: "https://github.com/#{repo}"
       author_icon: "https://a.slack-edge.com/2fac/plugins/github/assets/service_36.png"
+      title: "Pull request review #{state} for #{repo}##{pr_id} #{pr_title}"
+      title_link: pr_url
       text: content
+      fields: [
+        {
+          title: "Repository"
+          value: "<https://github.com/#{repo}|#{repo}>"
+          short: true
+        }
+        {
+          title: "Reviewer"
+          value: "<#{user_url}|#{user_name}>"
+          short: true
+        }
+        {
+          title: "Status"
+          value: state
+          short: true
+        }
+      ]
       footer: "GitHub"
       footer_icon: "https://a.slack-edge.com/2fac/plugins/github/assets/service_36.png"
       ts: ts

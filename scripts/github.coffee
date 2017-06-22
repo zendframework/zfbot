@@ -26,6 +26,7 @@
 
 module.exports = (robot) ->
   authorize = require '../lib/authorize'
+  bodyParser = require 'body-parser'
   github_push = require '../lib/github-push'
   github_issues = require '../lib/github-issues'
   github_issue_comment = require '../lib/github-issue-comment'
@@ -63,24 +64,36 @@ module.exports = (robot) ->
     return msg.send "You are not allowed to do that." if !authorize(robot, msg)
     githubSub.clear msg
 
+  # In order to calculate signatures, we need to shove the JSON body
+  # parser to the top of the stack and have it set the raw request body
+  # contents in the request when done parsing.
+  robot.router.stack.unshift {
+    route: "/github"
+    handle: bodyParser.json {
+      verify: (req, res, buf, encoding) ->
+        req.rawBody = buf
+    }
+  }
+
   robot.router.post '/github/:room/:event', (req, res) ->
+    room = req.params.room
+    event = req.params.event
+
     if event not in githubSub.events
-      robot.emit 'error', "Unrecognized github event '#{event}' was pinged"
-      res.sendStatus 203
+      robot.logger.error "Unrecognized github event '#{event}' was pinged"
+      res.send 203, "Unrecognized event #{event}"
       return
 
     if not githubSub.verifySignature(req)
-      robot.emit 'error', "Invalid payload submitted to /github/#{req.params.room}/#{req.params.event}; signature invalid"
-      res.sendStatus 203
+      robot.logger.error "Invalid payload submitted to /github/#{room}/#{event}; signature invalid"
+      res.send 203, "Invalid or missing signature"
       return
 
-    room = req.params.room
-    event = req.params.event
-    data = JSON.parse req.body
+    data = req.body
 
     if not githubSub.verifyRoom(data.repository.full_name, room)
-      robot.emit 'error', "Invalid payload submitted to /github/#{req.params.room}/#{req.params.event}; no repo '#{data.repository.full_name}' hooks registered for this room"
-      res.sendStatus 203
+      robot.logger.error "Invalid payload submitted to /github/#{room}/#{req.params.event}; no repo '#{data.repository.full_name}' hooks registered for this room"
+      res.send 203, "Unrecognized"
       return
 
     # Now, we need to switch on the event, and determine what message to send
@@ -101,4 +114,4 @@ module.exports = (robot) ->
       when "status"
         github_status robot, room, data, HUBOT_GITHUB_TOKEN
 
-    res.sendStatus 202
+    res.send 202

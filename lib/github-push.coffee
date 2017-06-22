@@ -21,7 +21,7 @@
 
 fetch = require 'node-fetch'
 formurlencoded = require 'form-urlencoded'
-hmacsha1 = require 'hmacsha1'
+crypto = require 'crypto'
 
 class GithubPush
   constructor: (@robot, @hubbaseurl, @token, @secret) ->
@@ -136,10 +136,10 @@ class GithubPush
 
   verifySignature: (req) ->
     return false if not req.headers?
-    return false if not req.headers.hasOwnProperty("X-Hub-Signature")
-    signature = req.headers["X-Hub-Signature"]
-    compare = hmacsha1 @secret, req.body
-    return signature == compare
+    return false if not req.headers.hasOwnProperty("x-hub-signature")
+    signature = req.headers["x-hub-signature"]
+    compare = crypto.createHmac('sha1', @secret).update(req.rawBody).digest('hex')
+    return signature == compare.toString()
 
   verifyRoom: (repo, room) ->
     repos = @robot.brain.get @BRAIN_GITHUB_REPOS

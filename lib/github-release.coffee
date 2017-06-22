@@ -29,15 +29,27 @@ module.exports = (robot, room, payload) ->
 
   attachment =
     attachments: [
-      fallback: "[#{repo}] New release #{release_name} created by #{user_name}"
+      fallback: "[#{repo}] New release #{release_name} created by #{user_name}: #{release_url}"
       color: "#4183C4"
       author_name: "#{repo} (GitHub)"
       author_link: "https://github.com/#{repo}"
       author_icon: "https://a.slack-edge.com/2fac/plugins/github/assets/service_36.png"
-      pretext: "[#{repo}] New release #{release_name} created by [#{user_name}](#{user_url})"
+      pretext: "[#{repo}] New release #{release_name} created by #{user_name}"
       title: release_name
       title_link: release_url
       text: release_body
+      fields: [
+        {
+          title: "Repository"
+          value: "<https://github.com/#{repo}|#{repo}>"
+          short: true
+        }
+        {
+          title: "Released By"
+          value: "<#{user_url}|#{user_name}>"
+          short: true
+        }
+      ]
       footer: "GitHub"
       footer_icon: "https://a.slack-edge.com/2fac/plugins/github/assets/service_36.png"
       ts: ts
