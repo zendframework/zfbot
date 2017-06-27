@@ -161,13 +161,13 @@ class TweetStream
     return msg.send "You are not allowed to do that." if !authorize(@robot, msg)
 
     screen_name = msg.match[1]
-    @getIdFromScreenName(screen_name, (err, id) =>
+    @getIdFromScreenName screen_name, (err, id) =>
       return @robot.logger.error("Can not get twitter user id from #{screen_name}", err) if err
 
       stream = new Stream()
       stream.toFollow(msg.message.room, screen_name, id)
       @initializeStream(stream)
-    )
+      msg.send "I have started following tweets from @#{screen_name}"
 
   list: (msg) ->
     currentRoomTags = @streams
@@ -213,5 +213,6 @@ class TweetStream
     stream = new Stream()
     stream.toTrack(msg.message.room, msg.match[1])
     @initializeStream(stream)
+    msg.send "I have started tracking tweets matching '#{msg.match[1]}'"
 
 module.exports = TweetStream
