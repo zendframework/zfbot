@@ -126,23 +126,25 @@ harder.
 - [ ] Write functionality for the `release` event that updates the release RSS
   feed and/or notifies twitter.
 
-## Discourse
+## [x] Discourse
 
-### Webhooks
+### [ ] Webhooks
 
 Ping the Discourse team about the webhooks. If they allow it:
 
-- Write a route that accepts Discourse events, and sends messages to slack. Will
+- [ ] Write a route that accepts Discourse events, and sends messages to slack. Will
   likely need to capture a few days of events first to see what we can send.
 
-### Polling
+### [x] Polling
 
 If they do not answer, or answer in the negative:
 
-- Remove the ACL functionality and use the new ACL module
-- Fix the polling issue, and ensure it does not emit the latest item on every
+- [x] Remove the ACL functionality and use the new ACL module
+- [x] Fix the polling issue, and ensure it does not emit the latest item on every
   poll.
-- Potentially poll more frequently
+- [x] Differentiate between comments and new topics
+- [x] Allow polling for specific categories and/or tags
+- [x] Potentially poll more frequently
 
 ## Nginx
 
