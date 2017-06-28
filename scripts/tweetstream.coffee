@@ -42,10 +42,10 @@ module.exports = (robot) ->
 
   tweetStream = new TweetStream(robot, new Twit(AUTH), process.env.HUBOT_TWITTER_CLEAN_SUBSCRIPTIONS?)
 
-  robot.respond(/twitter clear/i, (msg) -> tweetStream.clear(msg))
-  robot.respond(/twitter follow (.*)$/i, (msg) -> tweetStream.follow(msg))
-  robot.respond(/twitter list/i, (msg) -> tweetStream.list(msg))
-  robot.respond(/twitter unfollow (.*)$/i, (msg) -> tweetStream.unfollow(msg))
-  robot.respond(/twitter untrack (.*)$/i, (msg) -> tweetStream.untrack(msg))
-  robot.respond(/twitter track (.*)$/i, (msg) -> tweetStream.track(msg))
-  robot.brain.on("loaded", (data) -> tweetStream.load(data))
+  robot.respond /twitter clear/i, (msg) -> tweetStream.clear(msg)
+  robot.respond /twitter follow (.*)$/i, (msg) -> tweetStream.follow(msg)
+  robot.respond /twitter list/i, (msg) -> tweetStream.list(msg)
+  robot.respond /twitter unfollow (.*)$/i, (msg) -> tweetStream.unfollow(msg)
+  robot.respond /twitter untrack (.*)$/i, (msg) -> tweetStream.untrack(msg)
+  robot.respond /twitter track (.*)$/i, (msg) -> tweetStream.track(msg)
+  robot.brain.on "loaded", (data) -> tweetStream.load(data)

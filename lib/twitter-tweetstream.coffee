@@ -18,13 +18,12 @@ class TweetStream
 
   saveTweetStream: (stream) ->
     @streams.push(stream)
-    found = _.find(@robot.brain.get(@BRAIN_TWITTER_STREAMS), (subscription) ->
+    found = _.find @robot.brain.get(@BRAIN_TWITTER_STREAMS), (subscription) ->
       switch stream.type
         when TYPES.FOLLOW
           return subscription.follow == stream.follow && subscription.room == stream.room && subscription.type == stream.type
         when TYPES.TRACK
           return subscription.track == stream.track && subscription.room == stream.room && subscription.type == stream.type
-    )
 
     return if found
 
@@ -44,9 +43,9 @@ class TweetStream
       else
         return
 
-    savedStreams = @robot.brain.get(@BRAIN_TWITTER_STREAMS)
-    savedStreams.push(toSave)
-    @robot.brain.set(@BRAIN_TWITTER_STREAMS, savedStreams)
+    savedStreams = @robot.brain.get @BRAIN_TWITTER_STREAMS
+    savedStreams.push toSave
+    @robot.brain.set @BRAIN_TWITTER_STREAMS, savedStreams
 
   formatTimeString: (date) ->
     ampm  = "am"
@@ -70,11 +69,11 @@ class TweetStream
       else
         return
 
-    tweetStream = @twit.stream('statuses/filter', filter)
+    tweetStream = @twit.stream 'statuses/filter', filter
     tweetStream.on 'tweet', (tweet) =>
       return if stream.type == TYPES.FOLLOW && tweet.user.id_str != stream.follow
-      ts = new Date(tweet.created_at)
-      ts = new Date(ts.getTime())
+      ts = new Date tweet.created_at
+      ts = new Date ts.getTime()
       created = @formatTimeString ts
 
       attachment =
@@ -92,17 +91,17 @@ class TweetStream
 
       if tweet.entities?.media? && tweet.entities.media.length > 0
         tweet.entities.media.forEach (media) ->
-          attachment.attachments.push({
+          attachment.attachments.push {
             color: "#00ACED"
             fallback: media.media_url_https
             text: media.media_url_https
-          })
+          }
 
       @robot.send room: stream.room, attachment
 
-    @robot.logger.info("Started a new twitter stream", filter)
+    @robot.logger.info "Started a new twitter stream", filter
     stream.tweet_stream = tweetStream
-    @saveTweetStream(stream)
+    @saveTweetStream stream
 
   restoreSubscription: (subscription) ->
     return @robot.logger.error('Can not restore subscription; missing room or type', subscription) if !subscription || !subscription.room || !subscription.type
@@ -111,27 +110,26 @@ class TweetStream
       when TYPES.FOLLOW
         return @robot.logger.error('Can not restore follow subscription; missing follow identifier or screen name', subscription) if !subscription.screen_name || !subscription.follow
         stream = new Stream()
-        stream.toFollow(subscription.room, subscription.screen_name, subscription.follow)
-        @initializeStream(stream)
+        stream.toFollow subscription.room, subscription.screen_name, subscription.follow
+        @initializeStream stream
       when TYPES.TRACK
         return @robot.logger.error('Can not restore track subscription; missing tracking string', subscription) if !subscription.track
         stream = new Stream()
-        stream.toTrack(subscription.room, subscription.track)
-        @initializeStream(stream)
+        stream.toTrack subscription.room, subscription.track
+        @initializeStream stream
 
   restoreSubscriptions: ->
-    subscriptions = @robot.brain.get(@BRAIN_TWITTER_STREAMS)
+    subscriptions = @robot.brain.get @BRAIN_TWITTER_STREAMS
     return @robot.brain.set(@BRAIN_TWITTER_STREAMS, []) if !subscriptions?.length?
     @restoreSubscription(subscription) for subscription in subscriptions
 
   getIdFromScreenName: (screen_name, callback) ->
-    @twit.get('users/lookup', {screen_name}, (err, response) ->
+    @twit.get 'users/lookup', {screen_name}, (err, response) ->
       return callback(err) if err
 
       return callback(new Error("User not found")) if !response?.length?
 
-      callback(null, response[0].id_str)
-    )
+      callback null, response[0].id_str
 
   load: (data) ->
     # this loaded event is sent on each robot.brain.set, skip it after initial load
@@ -146,13 +144,13 @@ class TweetStream
 
     match = (subscription) -> subscription.room == msg.message.room
 
-    toRemove = _.remove(@streams, match)
+    toRemove = _.remove @streams, match
 
     return msg.send "No subscription in this room" if !toRemove.length
 
     subscription.stream.stop() for subscription in toRemove
 
-    savedStreams = @robot.brain.get(@BRAIN_TWITTER_STREAMS)
+    savedStreams = @robot.brain.get @BRAIN_TWITTER_STREAMS
     @robot.brain.set(@BRAIN_TWITTER_STREAMS, _.remove(savedStreams, match))
 
     msg.send "Unsubscribed from all"
@@ -165,8 +163,8 @@ class TweetStream
       return @robot.logger.error("Can not get twitter user id from #{screen_name}", err) if err
 
       stream = new Stream()
-      stream.toFollow(msg.message.room, screen_name, id)
-      @initializeStream(stream)
+      stream.toFollow msg.message.room, screen_name, id
+      @initializeStream stream
       msg.send "I have started following tweets from @#{screen_name}"
 
   list: (msg) ->
@@ -181,18 +179,18 @@ class TweetStream
 
     return msg.send("No subscriptions. Hint: Type 'twitter track/follow XXX' to listen to XXX related tweets in current room") if not currentRoomTags.length
 
-    currentRoomTags.unshift("I am listening to tweets with the following criteria:")
-    msg.send currentRoomTags.join("\n")
+    currentRoomTags.unshift "I am listening to tweets with the following criteria:"
+    msg.send currentRoomTags.join "\n"
 
   unsubscribe: (match) ->
-    toRemove = _.remove(@streams, match)
+    toRemove = _.remove @streams, match
     return false if !toRemove.length
 
     subscription.tweet_stream.stop() for subscription in toRemove
 
-    savedStreams = @robot.brain.get(@BRAIN_TWITTER_STREAMS)
-    _.remove(savedStreams, match)
-    @robot.brain.set(@BRAIN_TWITTER_STREAMS, savedStreams)
+    savedStreams = @robot.brain.get @BRAIN_TWITTER_STREAMS
+    _.remove savedStreams, match
+    @robot.brain.set @BRAIN_TWITTER_STREAMS, savedStreams
     true
 
   unfollow: (msg) ->
@@ -211,8 +209,8 @@ class TweetStream
   track: (msg) ->
     return msg.send "You are not allowed to do that." if !authorize(@robot, msg)
     stream = new Stream()
-    stream.toTrack(msg.message.room, msg.match[1])
-    @initializeStream(stream)
+    stream.toTrack msg.message.room, msg.match[1]
+    @initializeStream stream
     msg.send "I have started tracking tweets matching '#{msg.match[1]}'"
 
 module.exports = TweetStream

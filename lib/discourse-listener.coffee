@@ -18,16 +18,16 @@ class DiscourseListener
     @restore()
 
   restore: () ->
-    watches = @robot.brain.get(@BRAIN_DISCOURSE_WATCH)
+    watches = @robot.brain.get @BRAIN_DISCOURSE_WATCH
     return @robot.brain.set(@BRAIN_DISCOURSE_WATCH, @watches) if !watches?.length?
     watches.forEach (watch) =>
       return if not watch.category?
       watch.last_poll = @lastPoll()
-      @initializeWatch(watch)
+      @initializeWatch watch
       @watches.push watch
 
   watch: (category, room) ->
-    found = _.find(@watches, (watch) -> watch.room == room and watch.category == category)
+    found = _.find @watches, (watch) -> watch.room == room and watch.category == category
     return false if found
 
     watch =
@@ -36,24 +36,24 @@ class DiscourseListener
       watcher: null
       last_poll: @lastPoll()
 
-    @initializeWatch(watch)
+    @initializeWatch watch
     @watches.push watch
 
     watches = @robot.brain.get(@BRAIN_DISCOURSE_WATCH) ? []
     watches.push {category, room}
-    @robot.brain.set(@BRAIN_DISCOURSE_WATCH, watches)
+    @robot.brain.set @BRAIN_DISCOURSE_WATCH, watches
     true
 
   unwatch: (category, room) ->
     match = (watch) -> room == watch.room and category == watch.category
-    found = _.find(@watches, match)
+    found = _.find @watches, match
     return false if not found
 
     for watch in found
       clearInterval(watch.watcher) if watch.watcher?
-      _.remove(@watches, match)
+      _.remove @watches, match
       watches = @robot.brain.get(@BRAIN_DISCOURSE_WATCH) ? []
-      changed = _.remove(watches, match)
+      changed = _.remove watches, match
       @robot.brain.set(@BRAIN_DISCOURSE_WATCH, watches) if changed.length
       @robot.logger.info "Stopped watching Discourse category '#{category}' in room '#{room}'"
 
@@ -74,7 +74,7 @@ class DiscourseListener
           continue if not topic.visible
           continue if not topic.last_posted_at?
 
-          posted_at = new Date(topic.last_posted_at)
+          posted_at = new Date topic.last_posted_at
           continue if posted_at <= watch.last_poll
 
           found = posted_at if not found or found < posted_at
@@ -106,8 +106,7 @@ class DiscourseListener
               text = "#{action} in <#{category_url}|#{watch.category}> by <#{@discourse_url}/u/#{user.username}|#{user.username}>:\n<#{topic_url}|#{topic.title}>"
 
           tags = []
-          topic.tags.forEach (tag) =>
-            tags.push "- <#{@discourse_url}/tags/#{tag}|#{tag}>"
+          topic.tags.forEach (tag) => tags.push "- <#{@discourse_url}/tags/#{tag}|#{tag}>"
 
           if tags.length > 0
             fields.push {
@@ -135,12 +134,12 @@ class DiscourseListener
 
         watch.last_poll = found if found
 
-    setInterval(watch.watcher, @poll_interval)
+    setInterval watch.watcher, @poll_interval
     @robot.logger.info "Started watching Discourse category '#{watch.category}' in room '#{watch.room}'"
     watch.watcher()
 
   lastPoll: () ->
-    return new Date(Date.now() - @poll_interval)
+    new Date(Date.now() - @poll_interval)
 
   getAuthor: (poster, users) ->
     for user in users

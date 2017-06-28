@@ -4,7 +4,7 @@
 # Commands:
 #   hubot discourse follow <category slug> - Start watching the specified Discourse category (by slug; e.g. "contributors", "questions/expressive") in the current room.
 #   hubot discourse unfollow <category slug> - Stop watching the specified Discourse category (by slug; e.g. "contributors", "questions/expressive") in the current room.
-#   hubot discourse status - List which Discourse categories are being watched in this room.
+#   hubot discourse list - List which Discourse categories are being watched in this room.
 #   hubot discourse clear - Unwatch all Discourse categories in this room.
 #
 # Configuration:
@@ -20,7 +20,7 @@
 #   hubot discourse follow contributors
 #   hubot discourse follow questions/expressive
 #   hubot discourse unfollow questions/expressive
-#   hubot discourse status
+#   hubot discourse list
 #   hubot discourse clear
 #
 # Author:
@@ -44,8 +44,8 @@ module.exports = (robot) ->
 
   listener = new DiscourseListener(robot, new Discourse(discourse_url, discourse_api_key, discourse_user), discourse_url, poll_interval)
 
-  robot.respond(/discourse follow (.*)$/i, (msg) -> listener.follow msg, msg.match[1])
-  robot.respond(/discourse unfollow (.*)$/i, (msg) -> listener.unfollow msg, msg.match[1])
-  robot.respond(/discourse status\s*$/i, (msg) -> listener.list msg)
-  robot.respond(/discourse clear\s*$/i, (msg) -> listener.clear msg)
-  robot.brain.on("loaded", (data) -> listener.load(data))
+  robot.respond /discourse follow (.*)$/i, (msg) -> listener.follow msg, msg.match[1]
+  robot.respond /discourse unfollow (.*)$/i, (msg) -> listener.unfollow msg, msg.match[1]
+  robot.respond /discourse list\s*$/i, (msg) -> listener.list msg
+  robot.respond /discourse clear\s*$/i, (msg) -> listener.clear msg
+  robot.brain.on "loaded", (data) -> listener.load(data)

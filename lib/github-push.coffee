@@ -108,20 +108,16 @@ class GithubPush
     room = msg.message.room
     entries = @robot.brain.get @BRAIN_GITHUB_REPOS
     entries = [] if not entries?.length?
-    entries = entries.filter (entry) =>
-      entry.room == room
+    entries = entries.filter (entry) -> entry.room == room
 
     reduce = (unique, entry) ->
       unique.push entry.repo if entry.repo not in unique
       unique
 
     repos = entries.reduce reduce, []
-    repos = repos.map (repo) =>
-      "- #{repo}"
+    repos = repos.map (repo) -> "- <https://github.com/#{repo}|#{repo}>"
 
-    if not repos.length
-      msg.send "No github subscriptions in this room"
-      return
+    return msg.send "No github subscriptions in this room" if not repos.length
 
     repos.unshift "This room subscribes to the following github repositories:"
     msg.send repos.join("\n")
@@ -136,7 +132,7 @@ class GithubPush
 
   verifySignature: (req) ->
     return false if not req.headers?
-    return false if not req.headers.hasOwnProperty("x-hub-signature")
+    return false if not req.headers.hasOwnProperty "x-hub-signature"
     signature = req.headers["x-hub-signature"]
     compare = crypto.createHmac('sha1', @secret).update(req.rawBody).digest('hex')
     return signature == compare.toString()
