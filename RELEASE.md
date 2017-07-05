@@ -23,9 +23,25 @@ Once done, update the `docker-stack.yml` to reflect the new tag versions.
 
 ## Deployment
 
+Several things to remember:
+
+- Login to Docker Hub: `docker login -u <username>`
+- `eval $(docker-machine env zfbot)`
+- `docker swarm init --advertise-addr $(docker-machine url zfbot | sed 's#tcp://##' | sed -r 's#:[0-9]+$##')`
+
+The above are all necessary to ensure that the environment is correctly
+initialized before deployment. If you've done multiple releases between logins
+and within the same shell, you may get messages saying these steps have already
+been done; don't take that for granted, though!
+
+Once ready:
+
 ```bash
-$ docker stack deploy -f docker-stack.yml
+$ docker stack deploy --with-registry-auth -f docker-stack.yml zfbot
 ```
+
+Typically, this will only update containers with updated images, or where
+configuration in `docker-stack.yml` has occurred.
 
 ## SSL certs
 
