@@ -1,7 +1,11 @@
-disabled/
-node_modules/
 .DS_Store*
 .env
 .env.sh
 .hubot_history
+docker-compose.override.yml
+etc/docker/docker-compose.dummy.yml
+etc/docker/nginx-dummy.Dockerfile
+etc/nginx/certs/
+etc/nginx/nginx.dummy.conf
+node_modules/
 scripts/test.coffee
