@@ -53,6 +53,8 @@ module.exports = (robot, room, payload, token) ->
     when "error"
       status = "errored"
       color = "danger"
+    else
+      return
 
   if payload.context.match(/\/pr$/)
     query = encodeURIComponent("repo:#{repo}+#{payload.sha}")

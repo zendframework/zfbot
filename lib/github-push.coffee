@@ -133,8 +133,11 @@ class GithubPush
   verifySignature: (req) ->
     return false if not req.headers?
     return false if not req.headers.hasOwnProperty "x-hub-signature"
-    signature = req.headers["x-hub-signature"]
-    compare = crypto.createHmac('sha1', @secret).update(req.rawBody).digest('hex')
+
+    header = req.headers["x-hub-signature"]
+    signature = if header.match /^sha1\=/ then header.substring 5 else header
+
+    compare = crypto.createHmac('sha1', @secret).update(req.rawBody, 'utf-8').digest('hex')
     return signature == compare.toString()
 
   verifyRoom: (repo, room) ->

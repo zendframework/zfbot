@@ -5,15 +5,19 @@ services:
     environment:
       - REDIS_APPENDONLY=yes
       - REDIS_APPENDFSYNC=always
+    networks:
+      - server
     volumes:
       - /data
 
   hubot:
-    image: "mwop/zfbot:0.3.3"
+    image: "mwop/zfbot:0.3.6"
     depends_on:
       - redis
     env_file:
       - .env
+    networks:
+      - server
 
   nginx:
     image: "mwop/zfbot-nginx:0.2.2"
@@ -22,3 +26,11 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    networks:
+      - public
+      - server
+
+networks:
+  public:
+    external: true
+  server:
