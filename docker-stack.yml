@@ -6,7 +6,7 @@ services:
       - REDIS_APPENDONLY=yes
       - REDIS_APPENDFSYNC=always
     volumes:
-      - /data:/data
+      - /data
 
   hubot:
     image: "mwop/zfbot:0.3.3"
