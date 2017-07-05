@@ -46,8 +46,9 @@ class DiscourseListener
 
   unwatch: (category, room) ->
     match = (watch) -> room == watch.room and category == watch.category
-    found = _.find @watches, match
+    found = _.filter @watches, match
     return false if not found
+    return false if not found.length?
 
     for watch in found
       clearInterval(watch.watcher) if watch.watcher?
