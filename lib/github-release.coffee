@@ -56,3 +56,6 @@ module.exports = (robot, room, payload) ->
     ]
 
   robot.send room: room, attachment
+  robot.emit "tweet", {
+    status: "Released: #{release_name}\n\n #{release_url}"
+  }

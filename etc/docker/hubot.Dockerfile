@@ -12,6 +12,7 @@ RUN apt-get -y install nodejs yarn
 
 RUN mkdir /hubot
 ADD bin /hubot/bin
+ADD img /hubot/img
 ADD lib /hubot/lib
 ADD scripts /hubot/scripts
 COPY external-scripts.json /hubot/

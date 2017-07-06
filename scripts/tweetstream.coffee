@@ -29,6 +29,7 @@
 # Author:
 #   Matthew Weier O'Phinney
 
+Tweeter = require '../lib/twitter-tweeter'
 TweetStream = require '../lib/twitter-tweetstream'
 Twit = require('twit')
 
@@ -40,7 +41,9 @@ module.exports = (robot) ->
     access_token: process.env.HUBOT_TWITTER_ACCESS_TOKEN_KEY
     access_token_secret: process.env.HUBOT_TWITTER_ACCESS_TOKEN_SECRET
 
-  tweetStream = new TweetStream(robot, new Twit(AUTH), process.env.HUBOT_TWITTER_CLEAN_SUBSCRIPTIONS?)
+  twit = new Twit(AUTH)
+  tweeter = new Tweeter(robot, twit)
+  tweetStream = new TweetStream(robot, twit, process.env.HUBOT_TWITTER_CLEAN_SUBSCRIPTIONS?)
 
   robot.respond /twitter clear/i, (msg) -> tweetStream.clear(msg)
   robot.respond /twitter follow (.*)$/i, (msg) -> tweetStream.follow(msg)
@@ -49,3 +52,5 @@ module.exports = (robot) ->
   robot.respond /twitter untrack (.*)$/i, (msg) -> tweetStream.untrack(msg)
   robot.respond /twitter track (.*)$/i, (msg) -> tweetStream.track(msg)
   robot.brain.on "loaded", (data) -> tweetStream.load(data)
+
+  robot.on "tweet", (tweet_data) -> tweeter.tweet(tweet_data)
