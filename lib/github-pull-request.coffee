@@ -29,7 +29,7 @@ module.exports = (robot, room, payload) ->
     when "opened" then ts = new Date payload.pull_request.created_at
     when "closed" then ts = new Date payload.pull_request.closed_at
     when "reopened" then ts = new Date payload.pull_request.updated_at
-    when "merged" then ts = new Date payload.pull_request.merged_ad
+    when "merged" then ts = new Date payload.pull_request.merged_at
 
   ts = new Date ts.getTime()
   ts = Math.floor(ts.getTime() / 1000)
