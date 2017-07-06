@@ -94,7 +94,8 @@ class TweetStream
           attachment.attachments.push {
             color: "#00ACED"
             fallback: media.media_url_https
-            text: media.media_url_https
+            pretext: media.media_url_https
+            image_url: media.media_url_https
           }
 
       @robot.send room: stream.room, attachment
