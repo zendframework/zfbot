@@ -9,15 +9,12 @@ class ErrorHandler
   constructor: (@robot, @room) ->
 
   listen: (err, res) ->
-    if res != null
+    if res
       # If we have a response, reply
       res.reply "Oops! That's an error: #{err.message}"
 
     errorMessage = "ERROR:\n"
-    if err.stack != null
-      errorMessage += err.stack
-    else
-      errorMessage += err.toString()
+    errorMessage += if err.stack? then err.stack else err.toString()
 
     # Log the error
     @robot.logger.error errorMessage
