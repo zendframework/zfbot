@@ -27,6 +27,7 @@ module.exports = (robot, room, payload) ->
     when "opened" then ts = new Date payload.issue.created_at
     when "closed" then ts = new Date payload.issue.closed_at
     when "reopened" then ts = new Date payload.issue.updated_at
+    else return
 
   ts = new Date ts.getTime()
   ts = Math.floor(ts.getTime() / 1000)
