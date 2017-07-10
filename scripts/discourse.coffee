@@ -31,7 +31,11 @@ DiscourseListener = require '../lib/discourse-listener'
 
 Discourse.prototype.latestTopics = (category, callback) ->
   @getCategoryLatestTopic category, {}, (error, body, httpCode) ->
-    payload = JSON.parse(body)
+    try
+      payload = JSON.parse(body)
+    catch syntaxError
+      error = syntaxError
+
     error = payload if payload.errors?
     callback(error, payload, httpCode)
 
