@@ -3,6 +3,8 @@
 
 module.exports = (robot) ->
   robot.catchAll (msg) ->
+    return if not msg.message.text?
+
     regexp = new RegExp "^(@?#{robot.alias}:?|#{robot.name})", "i"
     matches = msg.message.text.match regexp
 
