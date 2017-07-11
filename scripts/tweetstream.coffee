@@ -8,6 +8,8 @@
 #   hubot twitter unfollow <screen_name> - Stop following tweets from @screen_name
 #   hubot twitter list - Get the watched keywords and users list in current room
 #   hubot twitter clear - Stop watching all keywords and users in current room
+#   hubot tweet <message> - Tweet a message from the configured twitter account
+#   hubot retweet <id> - Retweet a message from the configured twitter account. Provide either a tweet ID, or a tweet URI.
 #
 # Configuration:
 #
@@ -29,6 +31,7 @@
 # Author:
 #   Matthew Weier O'Phinney
 
+authorize = require '../lib/authorize'
 Tweeter = require '../lib/twitter-tweeter'
 TweetStream = require '../lib/twitter-tweetstream'
 Twit = require('twit')
@@ -51,6 +54,22 @@ module.exports = (robot) ->
   robot.respond /twitter unfollow (.*)$/i, (msg) -> tweetStream.unfollow(msg)
   robot.respond /twitter untrack (.*)$/i, (msg) -> tweetStream.untrack(msg)
   robot.respond /twitter track (.*)$/i, (msg) -> tweetStream.track(msg)
+
+  robot.respond /tweet (.*)$/i, (msg) ->
+    return msg.send "You are not allowed to do that." if !authorize(robot, msg)
+    text = msg.match[1]
+    if text.length > 140
+      msg.send "That tweet message is too long (#{text.length} characters); please shorten it to 140 characters."
+      return
+    tweeter.tweet { status: text }, (data) =>
+      msg.send "Tweet sent! https://twitter.com/#{data.screen_name}/status/#{data.id_str}"
+
+  robot.respond /retweet (.*)$/i, (msg) ->
+    return msg.send "You are not allowed to do that." if !authorize(robot, msg)
+    tweet_id = msg.match[1]
+    tweeter.retweet tweet_id, (data) =>
+      msg.send "Message retweeted! https://twitter.com/#{data.screen_name}/status/#{data.id_str}"
+
   robot.brain.on "loaded", (data) -> tweetStream.load(data)
 
   robot.on "tweet", (tweet_data) -> tweeter.tweet(tweet_data)
