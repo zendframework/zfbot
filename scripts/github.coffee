@@ -40,6 +40,7 @@ module.exports = (robot) ->
   HUBOT_GITHUB_DEFAULT_ORG = if process.env.HUBOT_GITHUB_DEFAULT_ORG? then process.env.HUBOT_GITHUB_DEFAULT_ORG else "zendframework"
   HUBOT_GITHUB_CALLBACK_URL_BASE = process.env.HUBOT_GITHUB_CALLBACK_URL_BASE
   HUBOT_GITHUB_CALLBACK_SECRET = process.env.HUBOT_GITHUB_CALLBACK_SECRET
+  HUBOT_GITHUB_RELEASE_CALLBACK = process.env.HUBOT_GITHUB_RELEASE_CALLBACK
 
   githubSub = new github_push robot, HUBOT_GITHUB_CALLBACK_URL_BASE, HUBOT_GITHUB_TOKEN, HUBOT_GITHUB_CALLBACK_SECRET
 
@@ -110,7 +111,7 @@ module.exports = (robot) ->
       when "pull_request_review_comment"
         github_pull_request_review_comment robot, room, data
       when "release"
-        github_release robot, room, data
+        github_release robot, room, data, HUBOT_GITHUB_RELEASE_CALLBACK, HUBOT_GITHUB_CALLBACK_SECRET
       when "status"
         github_status robot, room, data, HUBOT_GITHUB_TOKEN
 

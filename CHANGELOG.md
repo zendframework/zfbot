@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.3.1 - 2017-07-17
+
+### Added
+
+- Adds the ability to notify a configured callback URL with GitHub release
+  details once processing of the release is complete.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 0.3.0 - 2017-07-11
 
 ### Added

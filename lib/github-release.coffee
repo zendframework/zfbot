@@ -2,14 +2,16 @@
 #
 # Usage:
 #
-# require('../lib/github-release')(robot, room, data)
+# require('../lib/github-release')(robot, room, data, callback_url, # callback_secret)
 #
 # OR
 #
 # github_release = require '../lib/github-release'
-# github_release robot, room, data
+# github_release robot, room, data, callback_url, callback_secret
 
-module.exports = (robot, room, payload) ->
+crypt = require 'crypto'
+
+module.exports = (robot, room, payload, callback_url, callback_secret) ->
   return if not payload.release?
   return if not payload.action?
   return if not payload.action == "published"
@@ -55,7 +57,20 @@ module.exports = (robot, room, payload) ->
       ts: ts
     ]
 
+  # Message the room
   robot.send room: room, attachment
+
+  # Emit a tweet
   robot.emit "tweet", {
     status: "Released: #{release_name}\n\n #{release_url}"
   }
+
+  # Notify the callback_url
+  releasePayload = JSON.stringify payload
+  signature = crypto.createHmac('sha1', callback_secret).update(releasePayload, 'utf-8').digest('hex')
+  robot.http(callback_url)
+    .header("X-Hub-Signature", "sha1=#{signature}")
+    .post(releasePayload) (err, res, body) ->
+      if err
+        robot.logger.error "[GitHub Release] Error notifying #{callback_url} of release #{release_name}", err
+        return
