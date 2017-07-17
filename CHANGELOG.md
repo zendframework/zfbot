@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.3.3 - 2017-07-17
+
+### Added
+
+- Adds logging of rejected releases from the GitHub release callback handler.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 0.3.2 - 2017-07-17
 
 ### Added

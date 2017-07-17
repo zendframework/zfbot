@@ -74,3 +74,5 @@ module.exports = (robot, room, payload, callback_url, callback_secret) ->
       if err
         robot.logger.error "[GitHub Release] Error notifying #{callback_url} of release #{release_name}", err
         return
+      if res.statusCode isnt 202
+        robot.logger.error "[GitHub Release] Error returned by #{callback_url} for release #{release_name}: #{body}"
