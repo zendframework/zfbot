@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.3.4 - 2017-07-17
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Fixes error handling when unable to parse JSON returned when fetching topics
+  from Discourse.
+
 ## 0.3.3 - 2017-07-17
 
 ### Added

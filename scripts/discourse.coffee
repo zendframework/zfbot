@@ -35,9 +35,11 @@ Discourse.prototype.latestTopics = (category, callback) ->
       payload = JSON.parse(body)
     catch syntaxError
       error = syntaxError
+      callback error, body, httpCode
+      return
 
-    error = payload if payload.errors?
-    callback(error, payload, httpCode)
+    error = payload if payload?.errors?
+    callback error, payload, httpCode
 
 module.exports = (robot) ->
 
