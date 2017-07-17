@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.3.2 - 2017-07-17
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Fixes a typo when importing the crypto library within the github-release
+  handler.
+
 ## 0.3.1 - 2017-07-17
 
 ### Added

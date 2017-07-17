@@ -9,7 +9,7 @@
 # github_release = require '../lib/github-release'
 # github_release robot, room, data, callback_url, callback_secret
 
-crypt = require 'crypto'
+crypto = require 'crypto'
 
 module.exports = (robot, room, payload, callback_url, callback_secret) ->
   return if not payload.release?
