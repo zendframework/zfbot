@@ -146,3 +146,5 @@ module.exports = (robot, room, payload, token) ->
     ]
 
   robot.send room: room, attachment
+
+  robot.emit "build-success", {repo} if status == "passed" and branch == "master"
