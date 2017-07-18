@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.4.0 - 2017-07-18
+
+### Added
+
+- Adds functionality for building ZF documentation via two mechanisms:
+
+  - Calling `<bot> docs build <repo>` from within a channel (as a whitelisted user)
+  - Via a new "build-success" event, emitted by the github-status handler when a
+    succcessful build against a master branch occurs.
+
+  The functionality requires several new dependencies in the container, as well
+  as new environment variables to allow deploying the documentation.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
+
 ## 0.3.4 - 2017-07-17
 
 ### Added
