@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.4.1 - 2017-07-19
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Removes duplicate posts from Discourse watches within a channel.
+
 ## 0.4.0 - 2017-07-18
 
 ### Added
