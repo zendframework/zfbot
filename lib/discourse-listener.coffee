@@ -20,11 +20,19 @@ class DiscourseListener
   restore: () ->
     watches = @robot.brain.get @BRAIN_DISCOURSE_WATCH
     return @robot.brain.set(@BRAIN_DISCOURSE_WATCH, @watches) if !watches?.length?
+
+    persistWatches = []
     watches.forEach (watch) =>
       return if not watch.category?
+      return if _.find @watches, (compare) -> compare.room == watch.room and compare.category == watch.category
       watch.last_poll = @lastPoll()
       @initializeWatch watch
       @watches.push watch
+      persistWatches.push {
+        category: watch.category
+        room: watch.room
+      }
+    @robot.brain.set @BRAIN_DISCOURSE_WATCH, persistWatches
 
   watch: (category, room) ->
     found = _.find @watches, (watch) -> watch.room == room and watch.category == category
