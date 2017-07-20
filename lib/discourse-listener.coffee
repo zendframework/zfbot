@@ -71,7 +71,7 @@ class DiscourseListener
   initializeWatch: (watch) ->
     watch.watcher = =>
       @discourse.latestTopics watch.category, (error, payload) =>
-        return @robot.logger.error("Error retrieving latest discourse topics for category '#{category}' in room '#{room}'", error) if error
+        return @robot.logger.error("Error retrieving latest discourse topics for category '#{watch.category}' in room '#{watch.room}'", error) if error
 
         found = false
 
