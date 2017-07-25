@@ -20,6 +20,7 @@
     "hubot-slack": "^4.3.4",
     "node-fetch": "^1.7.1",
     "rimraf": "^2.6.1",
+    "slackify-html": "^1.0.1",
     "twit": "^2.2.5"
   },
   "engines": {

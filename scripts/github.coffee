@@ -81,21 +81,24 @@ module.exports = (robot) ->
     event = req.params.event
 
     if event not in githubSub.events
-      robot.logger.error "Unrecognized github event '#{event}' was pinged"
       res.send 203, "Unrecognized event #{event}"
+      robot.logger.error "Unrecognized github event '#{event}' was pinged"
       return
 
     if not githubSub.verifySignature(req)
-      robot.logger.error "Invalid payload submitted to /github/#{room}/#{event}; signature invalid"
       res.send 203, "Invalid or missing signature"
+      robot.logger.error "Invalid payload submitted to /github/#{room}/#{event}; signature invalid"
       return
 
     data = req.body
 
     if not githubSub.verifyRoom(data.repository.full_name, room)
-      robot.logger.error "Invalid payload submitted to /github/#{room}/#{req.params.event}; no repo '#{data.repository.full_name}' hooks registered for this room"
       res.send 203, "Unrecognized"
+      robot.logger.error "Invalid payload submitted to /github/#{room}/#{req.params.event}; no repo '#{data.repository.full_name}' hooks registered for this room"
       return
+
+    # We can now accept it; return a response immediately, and then process
+    res.send 202
 
     # Now, we need to switch on the event, and determine what message to send
     # to the room.
@@ -115,4 +118,3 @@ module.exports = (robot) ->
       when "status"
         github_status robot, room, data, HUBOT_GITHUB_TOKEN
 
-    res.send 202
