@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.6.0 - 2017-07-26
+
+### Added
+
+- [#2](https://github.com/zendframework/zfbot/pull/2) adds listener middleware
+  within `scripts/zf-acls.coffee` for verifying ACLs.
+
+### Changed
+
+- [#2](https://github.com/zendframework/zfbot/pull/2) modifies each of
+  `lib/twitter-tweetstream.coffee`, `lib/zf-acl.coffee`, `scripts/docs.coffee`,
+  `scripts/github.coffee`, `scripts/tweetstream.coffee`, and
+  `scripts/zf-acls.coffee` to pass the listener metadata `id: "authorize"` when
+  matching text to which to respond; this then triggers the new authorization
+  listener middleware.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#2](https://github.com/zendframework/zfbot/pull/2) removes the
+  `lib/authorize.coffee` module, as it is now redundant.
+
+### Fixed
+
+- [#2](https://github.com/zendframework/zfbot/pull/2) fixes how users are
+  removed from the authorization whitelist, switching from `_.remove` to
+  `_.pull`, as the latter returns the modified array.
+- [#2](https://github.com/zendframework/zfbot/pull/2) fixes how users are
+  restored during initialization to ensure no duplicates occur.
+
+
 ## 0.5.1 - 2017-07-26
 
 ### Added

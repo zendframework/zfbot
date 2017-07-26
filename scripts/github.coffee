@@ -27,7 +27,6 @@
 #   Matthew Weier O'Phinney
 
 module.exports = (robot) ->
-  authorize = require '../lib/authorize'
   bodyParser = require 'body-parser'
   github_push = require '../lib/github-push'
   github_issues = require '../lib/github-issues'
@@ -46,15 +45,13 @@ module.exports = (robot) ->
 
   githubSub = new github_push robot, HUBOT_GITHUB_CALLBACK_URL_BASE, HUBOT_GITHUB_TOKEN, HUBOT_GITHUB_CALLBACK_SECRET
 
-  robot.respond /github follow (.*)$/i, (msg) ->
-    return msg.send "You are not allowed to do that." if !authorize(robot, msg)
+  robot.respond /github follow (.*)$/i, id: "authorize", (msg) ->
     repo = msg.match[1]
     if not repo.match(/^[^/]+\/[^/]+$/)
       repo = "#{HUBOT_GITHUB_DEFAULT_ORG}/#{repo}"
     githubSub.subscribe msg, repo
 
-  robot.respond /github unfollow (.*)$/i, (msg) ->
-    return msg.send "You are not allowed to do that." if !authorize(robot, msg)
+  robot.respond /github unfollow (.*)$/i, id: "authorize", (msg) ->
     repo = msg.match[1]
     if not repo.match(/^[^/]+\/[^/]+$/)
       repo = "#{HUBOT_GITHUB_DEFAULT_ORG}/#{repo}"
@@ -63,12 +60,10 @@ module.exports = (robot) ->
   robot.respond /github list/i, (msg) ->
     githubSub.list msg
 
-  robot.respond /github clear/i, (msg) ->
-    return msg.send "You are not allowed to do that." if !authorize(robot, msg)
+  robot.respond /github clear/i, id: "authorize", (msg) ->
     githubSub.clear msg
 
   robot.hear /([a-z0-9][a-z0-9_.-]+\/[a-z0-9][a-z0-9_.-]+)\#(\d+)/, (msg) ->
-    robot.logger.info "Heard and responding to #{msg.match[0]}"
     msg.send "Mentioned <https://github.com/#{msg.match[1]}/issues/#{msg.match[2]}|#{msg.match[1]}##{msg.match[2]}>"
 
   # In order to calculate signatures, we need to shove the JSON body

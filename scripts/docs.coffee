@@ -18,7 +18,6 @@
 # Author:
 #   Matthew Weier O'Phinney
 
-authorize = require '../lib/authorize'
 DocsBuild = require '../lib/docs-build'
 
 module.exports = (robot) ->
@@ -29,8 +28,7 @@ module.exports = (robot) ->
   token = process.env.HUBOT_DOCS_GITHUB_TOKEN
   docs = new DocsBuild robot, user, email, token
 
-  robot.respond /docs build (.*)$/i, (msg) ->
-    return msg.send "You are not allowed to do that." if !authorize(robot, msg)
+  robot.respond /docs build (.*)$/i, id: "authorize", (msg) ->
     repo = msg.match[1]
     docs.build repo, msg
 
