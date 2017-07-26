@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.5.1 - 2017-07-26
+
+### Added
+
+- zfbot now responds to mentions of the form `{org}/{repo}#\d+` with a link to
+  the issue or pull request.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 0.5.0 - 2017-07-26
 
 ### Added
