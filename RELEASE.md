@@ -42,7 +42,7 @@ been done; don't take that for granted, though!
 Once ready:
 
 ```bash
-$ docker stack deploy --with-registry-auth -f docker-stack.yml zfbot
+$ docker stack deploy --with-registry-auth -c docker-stack.yml zfbot
 ```
 
 Typically, this will only update containers with updated images, or where

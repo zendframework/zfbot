@@ -1,57 +1,69 @@
 # Description:
-#   Follow Discourse topics.
+#   Listen to Discourse webhooks. Listens for "topic" and "post" hooks, passing
+#   them on to dedicated webhook scripts. Middleware is registered that verifies
+#   the incoming payload's X-Discourse-Event-Signature against a known secret to
+#   validate the origin of the webhook payload.
 #
-# Commands:
-#   hubot discourse follow <category slug> - Start watching the specified Discourse category (by slug; e.g. "contributors", "questions/expressive") in the current room.
-#   hubot discourse unfollow <category slug> - Stop watching the specified Discourse category (by slug; e.g. "contributors", "questions/expressive") in the current room.
-#   hubot discourse list - List which Discourse categories are being watched in this room.
-#   hubot discourse clear - Unwatch all Discourse categories in this room.
+#   Register webhooks via the Discourse settings UI. When you do, use URIs of
+#   the format "/discourse/{ROOM_ID}/(topic|post)", where {ROOM_ID} is the
+#   identifier for the Slack room to which the webhook should post messages (you
+#   can retrieve that by right-clicking a room, copying the URL, and extracting
+#   the final path segment).
 #
 # Configuration:
 #
 # The following environment variables are required.
 #
-# HUBOT_DISCOURSE_URL:            Base URL to the Discourse installation
-# HUBOT_DISCOURSE_USER:           Discourse username for API
-# HUBOT_DISCOURSE_API_KEY:        API key associated with user
-# HUBOT_DISCOURSE_POLL_INTERVAL:  Interval for polling
-#
-# Examples:
-#   hubot discourse follow contributors
-#   hubot discourse follow questions/expressive
-#   hubot discourse unfollow questions/expressive
-#   hubot discourse list
-#   hubot discourse clear
+# HUBOT_DISCOURSE_URL: Base URL to the Discourse installation
+# HUBOT_DISCOURSE_SECRET: Shared secret between Discourse instance and webhook # (for verifying signatures)
 #
 # Author:
 #   Matthew Weier O'Phinney
 
-Discourse = require 'discourse-api'
-DiscourseListener = require '../lib/discourse-listener'
-
-Discourse.prototype.latestTopics = (category, callback) ->
-  @getCategoryLatestTopic category, {}, (error, body, httpCode) ->
-    try
-      payload = JSON.parse(body)
-    catch syntaxError
-      error = syntaxError
-      callback error, body, httpCode
-      return
-
-    error = payload if payload?.errors?
-    callback error, payload, httpCode
+bodyParser = require 'body-parser'
+discourse_post = require "../lib/discourse-post"
+discourse_topic = require "../lib/discourse-topic"
+verify_signature = require "../lib/discourse-verify-signature"
 
 module.exports = (robot) ->
 
   discourse_url = process.env.HUBOT_DISCOURSE_URL
-  discourse_user = process.env.HUBOT_DISCOURSE_USER
-  discourse_api_key = process.env.HUBOT_DISCOURSE_API_KEY
-  poll_interval = process.env.HUBOT_DISCOURSE_POLL_INTERVAL ? 300000
+  discourse_secret = process.env.HUBOT_DISCOURSE_SECRET
 
-  listener = new DiscourseListener(robot, new Discourse(discourse_url, discourse_api_key, discourse_user), discourse_url, poll_interval)
+  # In order to calculate signatures, we need to shove the JSON body
+  # parser to the top of the stack and have it set the raw request body
+  # contents in the request when done parsing.
+  robot.router.stack.unshift {
+    route: "/discourse"
+    handle: bodyParser.json {
+      verify: (req, res, buf, encoding) ->
+        req.rawBody = buf
+    }
+  }
 
-  robot.respond /discourse follow (.*)$/i, (msg) -> listener.follow msg, msg.match[1]
-  robot.respond /discourse unfollow (.*)$/i, (msg) -> listener.unfollow msg, msg.match[1]
-  robot.respond /discourse list\s*$/i, (msg) -> listener.list msg
-  robot.respond /discourse clear\s*$/i, (msg) -> listener.clear msg
-  robot.brain.on "loaded", (data) -> listener.load(data)
+  robot.router.post '/discourse/:room/:event', (req, res) ->
+    room = req.params.room
+    event = req.params.event
+
+    if event not in ["topic", "post"]
+      res.send 203, "Unrecognized event #{event}"
+      robot.logger.error "[Discourse] Unrecognized event '#{event}' was pinged"
+      return
+
+    if not verify_signature(req, discourse_secret)
+      res.send 203, "Invalid or missing signature"
+      robot.logger.error "Invalid payload submitted to /discourse/#{room}/#{event}; signature invalid"
+      return
+
+    # We can accept it now, so return a response immediately
+    res.send 202
+
+    data = req.body
+
+    # Now, we need to switch on the event, and determine what message to send
+    # to the room.
+    switch event
+      when "topic"
+        discourse_topic robot, room, discourse_url, data
+      when "post"
+        discourse_post robot, room, discourse_url, data

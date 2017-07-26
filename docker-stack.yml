@@ -11,7 +11,7 @@ services:
       - /data:/data
 
   hubot:
-    image: "mwop/zfbot:0.5.2"
+    image: "mwop/zfbot:0.6.0"
     depends_on:
       - redis
     env_file:
@@ -20,7 +20,7 @@ services:
       - server
 
   nginx:
-    image: "mwop/zfbot-nginx:0.2.2"
+    image: "mwop/zfbot-nginx:0.3.0"
     depends_on:
       - hubot
     ports:

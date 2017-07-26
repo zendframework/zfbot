@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.5.0 - 2017-07-26
+
+### Added
+
+- [#1](https://github.com/zendframework/zfbot/pull/1) adds new modules:
+  - `discourse-categories` returns an array of category details for known
+    Discourse categories in the ZF instance.
+  - `discourse-category` provides a function for looking up a Discourse category
+    by identifier.
+  - `discourse-post` handles an incoming "post" webhook event from Discourse.
+  - `discourse-topic` handles an incoming "topic" webhook event from Discourse.
+  - `discourse-verify-signature` performs hmac-sha256 signature verification for
+    Discourse webhook payloads.
+
+### Changed
+
+- [#1](https://github.com/zendframework/zfbot/pull/1) changes the `discourse`
+  script such that it no longer exposes any commands to Slack, and instead
+  registers routes for handling incoming Discourse webhooks.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#1](https://github.com/zendframework/zfbot/pull/1) removes the
+  `discourse-listener` module, in favor of using webhooks.
+
+### Fixed
+
+- Nothing.
+
 ## 0.4.2 - 2017-07-20
 
 ### Added
