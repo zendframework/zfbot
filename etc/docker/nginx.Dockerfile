@@ -2,7 +2,7 @@
 
 FROM nginx:1.13
 
-COPY data/etc/nginx/nginx.conf /etc/nginx/
-COPY data/etc/nginx/certs/* /etc/nginx/certs/
-COPY data/var/www/index.html /var/www/
+COPY ./etc/nginx/nginx.conf /etc/nginx/
+COPY ./etc/nginx/certs/* /etc/nginx/certs/
+COPY ./var/www/index.html /var/www/
 CMD ["nginx", "-g", "daemon off;"]
