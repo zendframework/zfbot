@@ -110,7 +110,6 @@ Testing the bot functionally requires some setup. First, you will need:
     slack name to which you will connect.
 - Twitter consumer key and secret, and access token key and secret. For this,
   you will need to create a Twitter app integration via https://apps.twitter.com.
-- A Discourse API key; ask @weierophinney for one when you're ready.
 - A GitHub personal access token: https://github.com/settings/tokens
 
 With that information:

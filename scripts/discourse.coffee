@@ -1,5 +1,14 @@
 # Description:
-#   Listen to Discourse webhooks
+#   Listen to Discourse webhooks. Listens for "topic" and "post" hooks, passing
+#   them on to dedicated webhook scripts. Middleware is registered that verifies
+#   the incoming payload's X-Discourse-Event-Signature against a known secret to
+#   validate the origin of the webhook payload.
+#
+#   Register webhooks via the Discourse settings UI. When you do, use URIs of
+#   the format "/discourse/{ROOM_ID}/(topic|post)", where {ROOM_ID} is the
+#   identifier for the Slack room to which the webhook should post messages (you
+#   can retrieve that by right-clicking a room, copying the URL, and extracting
+#   the final path segment).
 #
 # Configuration:
 #
