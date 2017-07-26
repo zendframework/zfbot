@@ -1,5 +1,7 @@
 # Description:
-#   Subscribe repositories to github events.
+#   Subscribe repositories to GitHub webhook events, and provide general GitHub
+#   integration. For example, any mention of "org/repo#1" will cause the bot to
+#   emit a link to the referenced issue or pull request.
 #
 # Commands:
 #   hubot github follow <repo> - Start following the specified repository in this channel; should be in the form <ownerOrOrg>/<repo>
@@ -64,6 +66,10 @@ module.exports = (robot) ->
   robot.respond /github clear/i, (msg) ->
     return msg.send "You are not allowed to do that." if !authorize(robot, msg)
     githubSub.clear msg
+
+  robot.hear /([a-z0-9][a-z0-9_.-]+\/[a-z0-9][a-z0-9_.-]+)\#(\d+)/, (msg) ->
+    robot.logger.info "Heard and responding to #{msg.match[0]}"
+    msg.send "Mentioned <https://github.com/#{msg.match[1]}/issues/#{msg.match[2]}|#{msg.match[1]}##{msg.match[2]}>"
 
   # In order to calculate signatures, we need to shove the JSON body
   # parser to the top of the stack and have it set the raw request body
