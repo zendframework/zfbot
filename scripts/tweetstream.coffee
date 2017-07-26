@@ -31,7 +31,6 @@
 # Author:
 #   Matthew Weier O'Phinney
 
-authorize = require '../lib/authorize'
 Tweeter = require '../lib/twitter-tweeter'
 TweetStream = require '../lib/twitter-tweetstream'
 Twit = require('twit')
@@ -48,15 +47,14 @@ module.exports = (robot) ->
   tweeter = new Tweeter(robot, twit)
   tweetStream = new TweetStream(robot, twit, process.env.HUBOT_TWITTER_CLEAN_SUBSCRIPTIONS?)
 
-  robot.respond /twitter clear/i, (msg) -> tweetStream.clear(msg)
-  robot.respond /twitter follow (.*)$/i, (msg) -> tweetStream.follow(msg)
+  robot.respond /twitter clear/i, id: "authorize", (msg) -> tweetStream.clear(msg)
+  robot.respond /twitter follow (.*)$/i, id: "authorize", (msg) -> tweetStream.follow(msg)
   robot.respond /twitter list/i, (msg) -> tweetStream.list(msg)
-  robot.respond /twitter unfollow (.*)$/i, (msg) -> tweetStream.unfollow(msg)
-  robot.respond /twitter untrack (.*)$/i, (msg) -> tweetStream.untrack(msg)
-  robot.respond /twitter track (.*)$/i, (msg) -> tweetStream.track(msg)
+  robot.respond /twitter unfollow (.*)$/i, id: "authorize", (msg) -> tweetStream.unfollow(msg)
+  robot.respond /twitter untrack (.*)$/i, id: "authorize", (msg) -> tweetStream.untrack(msg)
+  robot.respond /twitter track (.*)$/i, id: "authorize", (msg) -> tweetStream.track(msg)
 
-  robot.respond /tweet (.*)$/i, (msg) ->
-    return msg.send "You are not allowed to do that." if !authorize(robot, msg)
+  robot.respond /tweet (.*)$/i, id: "authorize", (msg) ->
     text = msg.match[1]
     if text.length > 140
       msg.send "That tweet message is too long (#{text.length} characters); please shorten it to 140 characters."
@@ -64,8 +62,7 @@ module.exports = (robot) ->
     tweeter.tweet { status: text }, (data) =>
       msg.send "Tweet sent! https://twitter.com/#{data.screen_name}/status/#{data.id_str}"
 
-  robot.respond /retweet (.*)$/i, (msg) ->
-    return msg.send "You are not allowed to do that." if !authorize(robot, msg)
+  robot.respond /retweet (.*)$/i, id: "authorize", (msg) ->
     tweet_id = msg.match[1]
     tweeter.retweet tweet_id, (data) =>
       msg.send "Message retweeted! https://twitter.com/#{data.screen_name}/status/#{data.id_str}"

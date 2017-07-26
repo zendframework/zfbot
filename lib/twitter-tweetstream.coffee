@@ -5,7 +5,6 @@
 #   Rewritten in coffeescript and transformed into a class with authorization #   guards by Matthew Weier O'Phinney
 
 _ = require('lodash')
-authorize = require('./authorize')
 Stream = require './twitter-stream'
 TYPES = require './twitter-types'
 
@@ -141,8 +140,6 @@ class TweetStream
     if @clear_subs then @robot.brain.set(@BRAIN_TWITTER_STREAMS, []) else @restoreSubscriptions()
 
   clear: (msg) ->
-    return msg.send "You are not allowed to do that." if !authorize(@robot, msg)
-
     match = (subscription) -> subscription.room == msg.message.room
 
     toRemove = _.remove @streams, match
@@ -157,8 +154,6 @@ class TweetStream
     msg.send "Unsubscribed from all"
 
   follow: (msg) ->
-    return msg.send "You are not allowed to do that." if !authorize(@robot, msg)
-
     screen_name = msg.match[1]
     @getIdFromScreenName screen_name, (err, id) =>
       return @robot.logger.error("Can not get twitter user id from #{screen_name}", err) if err
@@ -195,20 +190,15 @@ class TweetStream
     true
 
   unfollow: (msg) ->
-    return msg.send "You are not allowed to do that." if !authorize(@robot, msg)
-
     screen_name = msg.match[1]
 
     msg.send("I stopped following tweets from '#{screen_name}'") if @unsubscribe((subscription) => subscription.type == TYPES.FOLLOW && subscription.screen_name == screen_name && subscription.room == msg.message.room)
 
   untrack: (msg) ->
-    return msg.send "You are not allowed to do that." if !authorize(@robot, msg)
-
     word = msg.match[1]
     msg.send("I have stopped tracking tweets matching '#{word}'") if @unsubscribe((subscription) => subscription.type == TYPES.TRACK && subscription.track == word && subscription.room == msg.message.room)
 
   track: (msg) ->
-    return msg.send "You are not allowed to do that." if !authorize(@robot, msg)
     stream = new Stream()
     stream.toTrack msg.message.room, msg.match[1]
     @initializeStream stream
