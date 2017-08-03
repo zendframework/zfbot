@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.6.1 - 2017-08-03
+
+### Added
+
+- [#3](https://github.com/zendframework/zfbot/pull/3) adds gulp to the hubot
+  container.
+
+### Changed
+
+- [#3](https://github.com/zendframework/zfbot/pull/3) removes installation
+  instructions for `python3` from the hubot image, as it's already present in the
+  base container.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 0.6.0 - 2017-07-26
 
 ### Added
