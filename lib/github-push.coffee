@@ -115,9 +115,11 @@ class GithubPush
       unique
 
     repos = entries.reduce reduce, []
-    repos = repos.map (repo) -> "- <https://github.com/#{repo}|#{repo}>"
 
     return msg.send "No github subscriptions in this room" if not repos.length
+
+    repos.sort (a, b) -> a.localeCompare b, undefined, {numeric: true, sensitivity: "base"}
+    repos = repos.map (repo) -> "- <https://github.com/#{repo}|#{repo}>"
 
     repos.unshift "This room subscribes to the following github repositories:"
     msg.send repos.join("\n")
