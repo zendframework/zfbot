@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.6.2 - 2017-08-08
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Updates the `github list` command to sort the repositories during display.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Fixes
+
 ## 0.6.1 - 2017-08-03
 
 ### Added
