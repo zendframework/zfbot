@@ -16,8 +16,8 @@ module.exports = (robot, room, payload) ->
 
   action = payload.action
   repo = payload.repository.full_name
-  user_name = payload.issue.user.login
-  user_url = payload.issue.user.html_url
+  user_name = payload.sender.login
+  user_url = payload.sender.html_url
   issue_id = payload.issue.number
   issue_title = payload.issue.title
   issue_url = payload.issue.html_url
