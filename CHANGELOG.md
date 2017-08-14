@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.6.4 - 2017-08-14
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Updates how the issue webhook displays the event originator; instead of the
+  issue user (who is always the reporter), it now uses the event sender.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 0.6.3 - 2017-08-14
 
 ### Added
