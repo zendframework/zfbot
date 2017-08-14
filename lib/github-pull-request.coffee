@@ -18,8 +18,8 @@ module.exports = (robot, room, payload) ->
   action = "merged" if action == "closed" and payload.pull_request.merged
 
   repo = payload.repository.full_name
-  user_name = payload.pull_request.user.login
-  user_url = payload.pull_request.user.html_url
+  user_name = payload.sender.login
+  user_url = payload.sender.html_url
   pr_id = payload.pull_request.number
   pr_title = payload.pull_request.title
   pr_url = payload.pull_request.html_url
