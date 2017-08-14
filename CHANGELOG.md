@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.6.3 - 2017-08-14
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Updates how the pull-request webhook displays the event originator; instead of the
+  pull-request user (who is always the reporter), it now uses the event sender.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 0.6.2 - 2017-08-08
 
 ### Added
