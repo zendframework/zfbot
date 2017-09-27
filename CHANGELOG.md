@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.7.0 - 2017-09-27
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- [#6](https://github.com/zendframework/zfbot/pull/6) updates the hubot
+  container to use nodejs v8 + npm v5, eliminating the need for yarn.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 0.6.4 - 2017-08-14
 
 ### Added
