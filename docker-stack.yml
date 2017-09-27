@@ -11,7 +11,7 @@ services:
       - /data:/data
 
   hubot:
-    image: "mwop/zfbot:0.7.4"
+    image: "mwop/zfbot:0.8.0"
     depends_on:
       - redis
     env_file:
