@@ -7,7 +7,7 @@ RUN apt-get -y install apt-utils apt-transport-https build-essential curl
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get -y install nodejs git python3-pip php7.0-cli
 RUN pip3 install mkdocs pymdown-extensions
-RUN yarn global add gulp
+RUN npm install --global gulp
 
 RUN mkdir /hubot
 ADD bin /hubot/bin
@@ -16,9 +16,9 @@ ADD lib /hubot/lib
 ADD scripts /hubot/scripts
 COPY external-scripts.json /hubot/
 COPY package.json /hubot/
-COPY yarn.lock /hubot/
+COPY package-lock.json /hubot/
 
-RUN cd /hubot && yarn install
+RUN cd /hubot && npm install --no-save
 
 EXPOSE 9001
 
