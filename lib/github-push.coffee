@@ -55,8 +55,10 @@ class GithubPush
           "Content-Type": "application/x-www-form-urlencoded"
       }).then((res) =>
         if not res.ok
-          msg.send "Error subscribing to #{repo} event #{event}; please check the logs"
-          @robot.logger.error "Error subscribing to #{repo} event #{event}: #{err}\n#{err.stack}"
+          res.body.text().then((resData) =>
+            msg.send "Error subscribing to #{repo} event #{event}; please check the logs"
+            @robot.logger.error "Error subscribing to #{repo} event #{event} (#{res.status}): #{resData}"
+          )
           return
 
         repos = @robot.brain.get @BRAIN_GITHUB_REPOS
