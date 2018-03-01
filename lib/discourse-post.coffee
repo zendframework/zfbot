@@ -11,6 +11,9 @@ module.exports = (robot, room, discourse_url, payload) ->
 
   action = if post.created_at == post.updated_at then "created" else "edited"
 
+  # Uncomment to allow broadcast of edit events
+  return if action == "edited"
+
   url = "#{discourse_url}/t/#{post.topic_slug}/#{post.topic_id}/#{post.id}"
 
   ts = if action == "created" then post.created_at else post.updated_at

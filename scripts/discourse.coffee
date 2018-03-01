@@ -63,7 +63,8 @@ module.exports = (robot) ->
     # Now, we need to switch on the event, and determine what message to send
     # to the room.
     switch event
-      when "topic"
-        discourse_topic robot, room, discourse_url, data
+      # Uncomment to enable broadcast of topic created/edited events
+      # when "topic"
+      #   discourse_topic robot, room, discourse_url, data
       when "post"
         discourse_post robot, room, discourse_url, data
