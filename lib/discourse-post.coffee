@@ -9,10 +9,10 @@ module.exports = (robot, room, discourse_url, payload) ->
   return if post.hidden
   return if post.deleted_at
 
-  action = if post.created_at == post.updated_at then "created" else "edited"
-
   # Uncomment to allow broadcast of edit events
-  return if action == "edited"
+  return if post.created_at != post.updated_at
+
+  action = if post.created_at == post.updated_at then "created" else "edited"
 
   url = "#{discourse_url}/t/#{post.topic_slug}/#{post.topic_id}/#{post.id}"
 
