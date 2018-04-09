@@ -3,6 +3,7 @@
 FROM nginx:1.13
 
 COPY ./etc/nginx/nginx.conf /etc/nginx/
-COPY ./etc/nginx/certs/* /etc/nginx/certs/
 COPY ./var/www/index.html /var/www/
+
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
