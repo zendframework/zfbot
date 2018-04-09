@@ -11,7 +11,7 @@ services:
       - /data:/data
 
   hubot:
-    image: "mwop/zfbot:0.8.4"
+    image: "mwop/zfbot:{zfbot}"
     depends_on:
       - redis
     env_file:
@@ -20,14 +20,14 @@ services:
       - server
 
   nginx:
-    image: "mwop/zfbot-nginx:0.4.0"
+    image: "mwop/zfbot-nginx:{zfbot-nginx}"
     depends_on:
       - hubot
     networks:
       - server
 
   caddy:
-    image: "mwop/zfbot-caddy:0.1.0"
+    image: "mwop/zfbot-caddy:{zfbot-caddy}"
     env_file:
       - .caddy.env
     depends_on:

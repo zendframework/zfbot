@@ -7,27 +7,29 @@ production tokens.
 
 - zfbot:
   ```bash
-  $ docker build -t zfbot -f ./etc/docker/hubot.Dockerfile .
-  $ docker tag zfbot:latest mwop/zfbot:<tag_version>
-  $ docker push mwop/zfbot:<tag_version>
+  $ make zfbot
   ```
+  Note: requires a `.env` file with all appropriate tokens; see `.env.dist` for
+  a template.
 
 - zfbot-nginx:
   ```bash
-  $ docker build -t zfbot-nginx -f ./etc/docker/nginx.Dockerfile .
-  $ docker tag zfbot-nginx:latest mwop/zfbot-nginx:<tag_version>
-  $ docker push mwop/zfbot-nginx:<tag_version>
+  $ make nginx
   ```
 
-Once done, update the `docker-stack.yml` to reflect the new tag versions.
+- zfbot-caddy:
+  ```bash
+  $ make caddy
+  ```
+  Note: requires a `.caddy.env` file with definitions for the env vars
+  `CADDY_WEB_HOST` and `CADDY_TLS_EMAIL`.
 
 ## Deployment
 
 Several things to remember:
 
-- Login to Docker Hub: `docker login -u <username>`
 - `eval $(docker-machine env zfbot)`
-- `docker swarm init --advertise-addr $(docker-machine url zfbot | sed 's#tcp://##' | sed -r 's#:[0-9]+$##')`
+- If never before deployed, run `docker swarm init --advertise-addr $(docker-machine url zfbot | sed 's#tcp://##' | sed -r 's#:[0-9]+$##')`
 
 I had to create networks for each of `public` and `server` (a) to allow the
 containers to talk to each other, and (b) to expose a network publicly. I used
@@ -42,24 +44,8 @@ been done; don't take that for granted, though!
 Once ready:
 
 ```bash
-$ docker stack deploy --with-registry-auth -c docker-stack.yml zfbot
+$ make deploy
 ```
 
 Typically, this will only update containers with updated images, or where
-configuration in `docker-stack.yml` has occurred.
-
-## SSL certs
-
-For this, I use [acme.sh](https://github.com/Neilpang/acme.sh), and used the
-following:
-
-```bash
-$ export FREEDNS_User="<username on freedns.afraid.org>"
-$ export FREEDNS_Password="<password on freedns.afraid.org>"
-$ acme.sh --isue --dns dns_freedns -d zfbot.mwop.net
-```
-
-This generated the certificates for me, which I then copied into
-`etc/nginx/certs/` (ignored by git!) from `$HOME/.acme.sh/zfbot.mwop.net/`.
-`acme.sh` has a daily cronjob that will renew them automatically; I'm unsure if
-I'll need to update the certs used by nginx, however.
+configuration in `docker-stack.yml.dist` has occurred.

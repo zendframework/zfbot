@@ -3,6 +3,7 @@
 .env.sh
 .hubot_history
 docker-compose.override.yml
+docker-stack.yml
 etc/docker/docker-compose.dummy.yml
 etc/docker/nginx-dummy.Dockerfile
 etc/nginx/certs/
