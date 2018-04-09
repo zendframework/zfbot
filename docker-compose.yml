@@ -35,5 +35,4 @@ services:
       - "9443:443"
     volumes:
       - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./etc/nginx/certs:/etc/nginx/certs
       - ./var/www/index.html:/var/www/index.html
