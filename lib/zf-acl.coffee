@@ -17,9 +17,12 @@ class ZfAcl
 
   restoreAllowedUsers: ->
     users = @robot.brain.get @BRAIN_ACL_WHITELIST
+    console.log("Users", users) if @verbose
+    console.log("No users found in brain!") if @verbose && !users?.length?
     return @robot.brain.set(@BRAIN_ACL_WHITELIST, @user_whitelist) if !users?.length?
     for user in users
-      @user_whitelist.push(user) if not user in @user_whitelist
+      continue if user in @user_whitelist
+      @user_whitelist.push(user)
 
   verify: (msg) ->
     return true if 1 > @user_whitelist.length
