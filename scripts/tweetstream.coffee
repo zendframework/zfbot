@@ -56,8 +56,8 @@ module.exports = (robot) ->
 
   robot.respond /tweet (.*)$/i, id: "authorize", (msg) ->
     text = msg.match[1]
-    if text.length > 140
-      msg.send "That tweet message is too long (#{text.length} characters); please shorten it to 140 characters."
+    if text.length > 280
+      msg.send "That tweet message is too long (#{text.length} characters); please shorten it to 280 characters."
       return
     tweeter.tweet { status: text }, (data) =>
       msg.send "Tweet sent! https://twitter.com/#{data.screen_name}/status/#{data.id_str}"
