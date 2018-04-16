@@ -6,7 +6,7 @@ RUN apt-get update
 RUN apt-get -y install apt-utils apt-transport-https build-essential curl
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get -y install nodejs git python3-pip php7.1-cli
-RUN pip3 install mkdocs==0.17.2 pymdown-extensions
+RUN pip3 install mkdocs pymdown-extensions
 RUN npm install --global gulp
 
 RUN mkdir /hubot
