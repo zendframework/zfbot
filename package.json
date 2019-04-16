@@ -17,12 +17,12 @@
     "hubot-rules": "^0.1.1",
     "hubot-scripts": "^2.17.2",
     "hubot-shipit": "^0.2.0",
-    "hubot-slack": "^4.3.4",
-    "lodash": "^4.17.4",
+    "hubot-slack": "^4.6.0",
+    "lodash": "^4.17.11",
     "node-fetch": "^1.7.1",
-    "rimraf": "^2.6.1",
+    "rimraf": "^2.6.3",
     "slackify-html": "^1.0.1",
-    "twit": "^2.2.5"
+    "twit": "^2.2.11"
   },
   "engines": {
     "node": "0.10.x"
