@@ -74,7 +74,7 @@ module.exports = (robot) ->
 
     msg = {
       send: (msg) ->
-        robot.logger.error msg
+        robot.logger.info msg
     }
 
     docs.build data.repo, msg
