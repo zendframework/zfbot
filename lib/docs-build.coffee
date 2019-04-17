@@ -64,6 +64,7 @@ class DocsBuild
         exec command, {cwd: "/tmp/#{repo}"}, (error, stdout, stderr) =>
           if error
             @robot.logger.error "[docs-build] Error running zf-mkdoc-theme deploy.sh: #{error}"
+            @robot.logger.error "[docs-build] #{stdout}"
             @robot.logger.error "[docs-build] #{stderr}"
             msg.send "An error occurred while building docs for #{repo}; try again later." if msg
             @cleanUp repo
