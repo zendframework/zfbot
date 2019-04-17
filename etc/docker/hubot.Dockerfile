@@ -2,6 +2,9 @@
 
 FROM ubuntu:artful
 
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
 RUN apt-get update
 RUN apt-get -y install apt-utils apt-transport-https build-essential curl
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
