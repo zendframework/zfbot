@@ -9,7 +9,7 @@ RUN apt-get update
 RUN apt-get -y install apt-utils apt-transport-https build-essential curl
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get -y install nodejs git python3-pip php7.1-cli gcc g++ make
-RUN pip3 install mkdocs pymdown-extensions markdown-fenced-code-tabs
+RUN pip3 install mkdocs pymdown-extensions markdown-fenced-code-tabs pyaml
 
 RUN mkdir /hubot
 ADD bin /hubot/bin
