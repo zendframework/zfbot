@@ -14,7 +14,7 @@ crypto = require 'crypto'
 module.exports = (robot, room, payload, callback_url, callback_secret) ->
   return if not payload.release?
   return if not payload.action?
-  return if not payload.action == "published"
+  return if payload.action != "published"
 
   repo = payload.repository.full_name
 
